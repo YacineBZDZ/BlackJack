@@ -1,0 +1,152 @@
+############### Blackjack Project #####################
+
+#Difficulty Normal 😎: Use all Hints below to complete the project.
+#Difficulty Hard 🤔: Use only Hints 1, 2, 3 to complete the project.
+#Difficulty Extra Hard 😭: Only use Hints 1 & 2 to complete the project.
+#Difficulty Expert 🤯: Only use Hint 1 to complete the project.
+
+############### Our Blackjack House Rules #####################
+
+## The deck is unlimited in size. 
+## There are no jokers. 
+## The Jack/Queen/King all count as 10.
+## The the Ace can count as 11 or 1.
+## Use the following list as the deck of cards:
+## cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
+## The cards in the list have equal probability of being drawn.
+## Cards are not removed from the deck as they are drawn.
+## The computer is the dealer.
+
+##################### Hints #####################
+
+#Hint 1: Go to this website and try out the Blackjack game: 
+#   https://games.washingtonpost.com/games/blackjack/
+#Then try out the completed Blackjack project here: 
+#   http://blackjack-final.appbrewery.repl.run
+
+#Hint 2: Read this breakdown of program requirements: 
+#   http://listmoz.com/view/6h34DJpvJBFVRlZfJvxF
+#Then try to create your own flowchart for the program.
+
+#Hint 3: Download and read this flow chart I've created: 
+#   https://drive.google.com/uc?export=download&id=1rDkiHCrhaf9eX7u7yjM1qwSuyEk-rPnt
+
+#Hint 4: Create a deal_card() function that uses the List below to *return* a random card.
+#11 is the Ace.
+#cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
+
+#Hint 5: Deal the user and computer 2 cards each using deal_card() and append().
+#user_cards = []
+#computer_cards = []
+
+#Hint 6: Create a function called calculate_score() that takes a List of cards as input 
+#and returns the score. 
+#Look up the sum() function to help you do this.
+
+#Hint 7: Inside calculate_score() check for a blackjack (a hand with only 2 cards: ace + 10) and return 0 instead of the actual score. 0 will represent a blackjack in our game.
+
+#Hint 8: Inside calculate_score() check for an 11 (ace). If the score is already over 21, remove the 11 and replace it with a 1. You might need to look up append() and remove().
+
+#Hint 9: Call calculate_score(). If the computer or the user has a blackjack (0) or if the user's score is over 21, then the game ends.
+
+#Hint 10: If the game has not ended, ask the user if they want to draw another card. If yes, then use the deal_card() function to add another card to the user_cards List. If no, then the game has ended.
+
+#Hint 11: The score will need to be rechecked with every new card drawn and the checks in Hint 9 need to be repeated until the game ends.
+
+#Hint 12: Once the user is done, it's time to let the computer play. The computer should keep drawing cards as long as it has a score less than 17.
+
+#Hint 13: Create a function called compare() and pass in the user_score and computer_score. If the computer and user both have the same score, then it's a draw. If the computer has a blackjack (0), then the user loses. If the user has a blackjack (0), then the user wins. If the user_score is over 21, then the user loses. If the computer_score is over 21, then the computer loses. If none of the above, then the player with the highest score wins.
+
+#Hint 14: Ask the user if they want to restart the game. If they answer yes, clear the console and start a new game of blackjack and show the logo from art.py.
+
+import random;
+from replit import clear
+import art
+
+cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
+i = 11
+
+Launch_Game = input("Do you want to play a game of Blackjack? Type 'Y' or 'N':")
+
+def calculate_score(dict1, dict2): 
+  score1 = sum(dict1)
+  score2 = sum(dict2)
+  return score1, score2
+
+def CheckAce(userCards, userScore, dealerCards, dealerScore):
+  lose = userScore + 11
+  dealerLose = dealerScore + 11
+  if i in userCards and userScore > 10 and userScore != 21 and lose > 21:
+    ace = user_cards.index(11)
+    #print(f"the index of the ace :{ace} \n the card value of the ace is : {user_cards[ace]}")
+    user_cards[ace] = 1
+  elif i in dealerCards and dealerScore < 10 and dealerScore != 21 and dealerLose > 21:
+    aceDealer = dealer_cards.index(11)
+    #print(f"the index of the ace :{ace} \n the card value of the ace is : {user_cards[ace]}")
+    dealer_cards[aceDealer] = 1
+  
+while(Launch_Game == "Y"):
+  dict_cards = {}
+  player_take_card = True
+  dict_cards = {"card1": [], "card2": []}
+  user_score = 0
+  dealer_score = 0
+  Choose =""
+  dict_cards['card1'].extend([random.choice(cards),random.choice(cards)])
+  dict_cards['card2'].extend([random.choice(cards),random.choice(cards)])
+  user_cards =  dict_cards['card1']
+  dealer_cards = dict_cards['card2']
+  print(art.logo)
+  user_score, dealer_score = calculate_score(user_cards,dealer_cards)
+  print(f"Your cards are: {user_cards} , current score : {user_score} \n dealer first card is: {dealer_cards[0]} ")
+
+  CheckAce(user_cards, user_score, dealer_cards, dealer_score)
+  
+  while(user_score <= 21 and player_take_card == True):
+   Choose = input(f"Type 'Y' to get another card, type 'N' to pass: ")
+   if(Choose == "Y" and user_score <= 21 ):
+     user_cards.append(random.choice(cards))
+     user_score, dealer_score = calculate_score(user_cards,dealer_cards)
+     print(f"Your cards are: {user_cards} , current score : {user_score} \n dealer first card is: {dealer_cards[0]}")
+
+   elif(Choose == "N"):
+      break
+  while(dealer_score <= 21):
+    NewCard = random.choice(cards)
+    takeOrNo = NewCard + dealer_score
+    if(takeOrNo < 21):
+      #print(f"Dealer gets a {NewCard}")
+      dealer_cards.append(NewCard)
+      user_score, dealer_score = calculate_score(user_cards,dealer_cards)
+    else:
+      break
+      
+  
+  CheckAce(user_cards, user_score, dealer_cards, dealer_score)
+  user_score, dealer_score = calculate_score(user_cards,dealer_cards)
+
+  print(f"Your final hand: {user_cards}, final score: {user_score}")
+  print(f"dealer final hand: {dealer_cards}, final score: {dealer_score}")
+  if(dealer_score == 21 and user_score == 21 or dealer_score == user_score):
+    print("No one went over. It's a draw!")
+  elif(dealer_score == 21):
+    print("You Lose!")
+  elif(user_score == 21):
+    print("You win!")
+  elif(user_score < 21 and dealer_score > 21):
+    print("Opponent went over. You Win!")
+  elif(dealer_score < 21 and user_score > 21):
+    print("You went over. You Lose!")
+  elif(dealer_score < 21 and user_score < dealer_score):
+    print("Opponent Have a Biger Score. You Lose!")
+  elif(user_score < 21 and dealer_score < user_score):
+    print("You Have a Biger Score. You Win!")
+  else:
+    print("All went over. No one Wins!")
+    
+  
+  
+  Launch_Game = input("would you like to play Again?(Y/N)")
+  clear()
+  
+
