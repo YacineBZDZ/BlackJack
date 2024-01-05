@@ -1,16 +1,17 @@
 import random;
 #from replit import clear
 import art
-
-cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
+def takeCard():
+ cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
+ card = random.choice(cards)
+ return card
 i = 11
 
 Launch_Game = input("Do you want to play a game of Blackjack? Type 'Y' or 'N':")
-
-def calculate_score(dict1, dict2): 
-  score1 = sum(dict1)
-  score2 = sum(dict2)
-  return score1, score2
+#change this code because of redundancy
+def calculate_score(cards): 
+  score = sum(cards)
+  return score
 
 def CheckAce(userCards, userScore, dealerCards, dealerScore):
   lose = userScore + 11
@@ -31,12 +32,16 @@ while(Launch_Game == "Y"):
   user_score = 0
   dealer_score = 0
   Choose =""
-  dict_cards['card1'].extend([random.choice(cards),random.choice(cards)])
-  dict_cards['card2'].extend([random.choice(cards),random.choice(cards)])
+  #need to be changed withe angela's code 
+  for _ in range(2):
+    dict_cards['card1'].append(takeCard())
+    dict_cards['card2'].append(takeCard())
   user_cards =  dict_cards['card1']
   dealer_cards = dict_cards['card2']
   print(art.logo)
-  user_score, dealer_score = calculate_score(user_cards,dealer_cards)
+  user_score = calculate_score(user_cards)
+  dealer_score = calculate_score(dealer_cards)
+
   print(f"Your cards are: {user_cards} , current score : {user_score} \n dealer first card is: {dealer_cards[0]} ")
 
   CheckAce(user_cards, user_score, dealer_cards, dealer_score)
@@ -44,25 +49,27 @@ while(Launch_Game == "Y"):
   while(user_score <= 21 and player_take_card == True):
    Choose = input(f"Type 'Y' to get another card, type 'N' to pass: ")
    if(Choose == "Y" and user_score <= 21 ):
-     user_cards.append(random.choice(cards))
-     user_score, dealer_score = calculate_score(user_cards,dealer_cards)
+     user_cards.append(takeCard())
+     user_score = calculate_score(user_cards)
      print(f"Your cards are: {user_cards} , current score : {user_score} \n dealer first card is: {dealer_cards[0]}")
 
    elif(Choose == "N"):
       break
   while(dealer_score <= 21):
-    NewCard = random.choice(cards)
+    NewCard = takeCard()
     takeOrNo = NewCard + dealer_score
     if(takeOrNo < 21):
       #print(f"Dealer gets a {NewCard}")
       dealer_cards.append(NewCard)
-      user_score, dealer_score = calculate_score(user_cards,dealer_cards)
+      dealer_score = calculate_score(dealer_cards)
     else:
       break
       
   
   CheckAce(user_cards, user_score, dealer_cards, dealer_score)
-  user_score, dealer_score = calculate_score(user_cards,dealer_cards)
+  user_score = calculate_score(user_cards)
+  dealer_score = calculate_score(dealer_cards)
+
 
   print(f"Your final hand: {user_cards}, final score: {user_score}")
   print(f"dealer final hand: {dealer_cards}, final score: {dealer_score}")
